@@ -35,16 +35,16 @@ public class StudentController {
 	StudentRepository studentRepository;
 	
 	@GetMapping("/student")
-	public StudentDTO getStudents() {
-		System.out.println("/schedule called.");
-		String student_email = "test@csumb.edu";   // student's email 
+	public StudentDTO getStudents( @RequestParam("email") String email ) {
+		System.out.println("/schedule called."); 
 		
-		Student student = studentRepository.findByEmail(student_email);
+		Student student = studentRepository.findByEmail(email);
+	
 		if (student != null) {
 			System.out.println("/schedule student "+student.getName()+" "+student.getStudent_id());
 			return createStudentDTO(student);
 		} else {
-			System.out.println("/schedule student not found. "+student_email);
+			System.out.println("/schedule student not found. " + email);
 			throw  new ResponseStatusException( HttpStatus.BAD_REQUEST, "Student not found. " );
 		}
 	}
@@ -53,17 +53,13 @@ public class StudentController {
 	@Transactional
 	public StudentDTO addStudent( @RequestBody StudentDTO studentDTO) {
 
-		String student_name = "jorge";
-		String student_email = "papichulo@csumb.edu";   // student's email
-		
 		Student studentCreds = studentRepository.findByEmail(studentDTO.email);
 		
 		if (studentCreds == null) {
 			Student student = new Student();
-			student.setName(student_name);
-			student.setEmail(student_email);
+			student.setName(studentDTO.name);
+			student.setEmail(studentDTO.email);
 			Student savedStudent = studentRepository.save(student);
-			
 			StudentDTO result = createStudentDTO(savedStudent);
 			return result;
 		} else {
