@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -36,18 +37,18 @@ public class StudentController {
 	
 	@GetMapping("/student")
 	public StudentDTO getStudents( @RequestParam("email") String email ) {
-		System.out.println("/schedule called."); 
 		
 		Student student = studentRepository.findByEmail(email);
 	
 		if (student != null) {
-			System.out.println("/schedule student "+student.getName()+" "+student.getStudent_id());
+			System.out.println("student "+student.getName()+" "+student.getStudent_id());
 			return createStudentDTO(student);
 		} else {
-			System.out.println("/schedule student not found. " + email);
 			throw  new ResponseStatusException( HttpStatus.BAD_REQUEST, "Student not found. " );
 		}
 	}
+	
+	
 	
 	@PostMapping("/student")
 	@Transactional
@@ -66,6 +67,23 @@ public class StudentController {
 			throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Student already exists.  ");
 		}
 		
+	}
+	
+	
+	
+	@PutMapping("/student/{student_id}")
+	@Transactional
+	public void updateStatus( @PathVariable int student_id, @RequestBody StudentDTO studentDTO ) {
+		
+		Student student = studentRepository.findById(student_id);
+		
+		if(student != null) {
+			student.setStatusCode(studentDTO.status_code);
+			studentRepository.save(student);
+		}
+		else {
+			throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Student ID does not exist. " + student_id);
+		}
 	}
 	
 	private StudentDTO createStudentDTO(Student s) {

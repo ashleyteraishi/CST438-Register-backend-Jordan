@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -65,7 +66,7 @@ public class ScheduleController {
 	
 
 	
-	@PostMapping("/schedule")
+	@PostMapping("/{studentID}")
 	@Transactional
 	public ScheduleDTO.CourseDTO addCourse( @RequestBody ScheduleDTO.CourseDTO courseDTO  ) { 
 
@@ -77,7 +78,6 @@ public class ScheduleController {
 		// student.status
 		// = 0  ok to register
 		// != 0 hold on registration.  student.status may have reason for hold.
-		
 		if (student!= null && course!=null && student.getStatusCode()==0) {
 			// TODO check that today's date is not past add deadline for the course.
 			Enrollment enrollment = new Enrollment();
@@ -96,6 +96,8 @@ public class ScheduleController {
 		}
 		
 	}
+
+	
 	
 	@DeleteMapping("/schedule/{enrollment_id}")
 	@Transactional
@@ -113,7 +115,7 @@ public class ScheduleController {
 			 enrollmentRepository.delete(enrollment);
 		} else {
 			// something is not right with the enrollment.  
-			throw  new ResponseStatusException( HttpStatus.BAD_REQUEST, "Enrollment_id invalid. "+enrollment_id);
+			throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Enrollment_id invalid. "+enrollment_id);
 		}
 	}
 	
