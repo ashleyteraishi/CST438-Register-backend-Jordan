@@ -67,15 +67,18 @@ public class JunitTestStudent {
 		student.setName(TEST_STUDENT_NAME);
 		student.setEmail(TEST_STUDENT_EMAIL);
 		
+		// given  -- stubs for database repositories that return test data
 		given(studentRepository.findById(TEST_STUDENT_ID)).willReturn(null);
 		given(studentRepository.findByEmail(TEST_STUDENT_EMAIL)).willReturn(null);
 		given(studentRepository.save(any(Student.class))).willReturn(student);
 		
+		// create the DTO (data transfer object) for the student to be added.
 		StudentDTO studentDTO = new StudentDTO();
 		studentDTO.student_id = TEST_STUDENT_ID;
 		studentDTO.email = TEST_STUDENT_EMAIL;
 		studentDTO.name = TEST_STUDENT_NAME;
 		
+		// do an http post request with body of studentDTO as JSON
 		response = mvc.perform(
 				MockMvcRequestBuilders
 				 .post("/student")
@@ -84,11 +87,14 @@ public class JunitTestStudent {
 				 .accept(MediaType.APPLICATION_JSON))
 				.andReturn().getResponse();
 		
+		// verify that return status = OK (value of 200)
 		assertEquals(200, response.getStatus());
 		
+		// verify that returned data has non zero primary key
 		StudentDTO result = fromJsonString(response.getContentAsString(), StudentDTO.class);
 		assertNotEquals(0, result.student_id);
 		
+		//verify that repository save method was called
 		verify(studentRepository).save(any(Student.class));
 	}
 
@@ -100,19 +106,23 @@ public class JunitTestStudent {
 		Student student = new Student();
 		student.setStudent_id(TEST_STUDENT_ID);
 		
+		// given  -- stubs for database repositories that return test data
 		given(studentRepository.findById(TEST_STUDENT_ID)).willReturn(student);
 		
 		StudentDTO studentDTO = new StudentDTO();
 		studentDTO.student_id = TEST_STUDENT_ID;
+		
+		// do http GET for student
 		response = mvc.perform(
 				MockMvcRequestBuilders
 				 .get("/student?id=" + TEST_STUDENT_ID)
 				 .accept(MediaType.APPLICATION_JSON))
 				.andReturn().getResponse();
 		
+		// verify that return status = OK (value 200)
 		assertEquals(200, response.getStatus());
 		
-		
+		// verify that returned data contains the added course
 		studentDTO = fromJsonString(response.getContentAsString(), StudentDTO.class);
 		
 		boolean found = false;	
@@ -134,12 +144,15 @@ public class JunitTestStudent {
 		student.setStudent_id(TEST_STUDENT_ID);
 		student.setStatusCode(TEST_STUDENT_STATUS_CODE);
 		
+		// given  -- stubs for database repositories that return test data
 		given(studentRepository.findById(TEST_STUDENT_ID)).willReturn(student);
 		given(studentRepository.save(any(Student.class))).willReturn(student);
 		
 		StudentDTO studentDTO = new StudentDTO();
 		studentDTO.student_id = TEST_STUDENT_ID;
 		studentDTO.status_code = TEST_STUDENT_STATUS_CODE;
+		
+		// do http PUT request for student
 		response = mvc.perform(
 				MockMvcRequestBuilders
 				 .put("/student/" + studentDTO.student_id)
@@ -148,6 +161,7 @@ public class JunitTestStudent {
 				 .accept(MediaType.APPLICATION_JSON))
 				.andReturn().getResponse();
 		
+		// verify that return status = OK (value 200)
 		assertEquals(200, response.getStatus());
 	}
 	
