@@ -5,7 +5,7 @@ public class StudentDTO {
 	public String name;
 	public String email;
 	public String status;
-	public Integer status_code;
+	public int status_code;
 	
 	@Override
 	public String toString() {
@@ -33,10 +33,10 @@ public class StudentDTO {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (status_code == null) {			
-			if (other.status_code != null)
+		if (status_code != 1 || status_code != 0) {			
+			if (other.status_code != 1 || other.status_code != 0)
 				return false;
-		} else if (!status_code.equals(other.status_code))
+		} else if (status_code != other.status_code)
 			return false;
 		if (status == null) {
 			if (other.status != null)

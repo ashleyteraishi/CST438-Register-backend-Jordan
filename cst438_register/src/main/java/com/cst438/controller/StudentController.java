@@ -1,6 +1,5 @@
 package com.cst438.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +35,12 @@ public class StudentController {
 	StudentRepository studentRepository;
 	
 	@GetMapping("/student")
-	public StudentDTO getStudents( @RequestParam("email") String email ) {
+	public StudentDTO getStudent( @RequestParam("id") int id ) {
 		
-		Student student = studentRepository.findByEmail(email);
+		Student student = studentRepository.findById(id);
 	
 		if (student != null) {
-			System.out.println("student "+student.getName()+" "+student.getStudent_id());
+			System.out.println(student.toString());
 			return createStudentDTO(student);
 		} else {
 			throw  new ResponseStatusException( HttpStatus.BAD_REQUEST, "Student not found. " );
@@ -91,6 +90,8 @@ public class StudentController {
 		studentDTO.student_id = s.getStudent_id();
 		studentDTO.name = s.getName();
 		studentDTO.email = s.getEmail();
+		studentDTO.status = s.getStudentStatus();
+		studentDTO.status_code = s.getStatusCode();
 		return studentDTO;
 	}
 	

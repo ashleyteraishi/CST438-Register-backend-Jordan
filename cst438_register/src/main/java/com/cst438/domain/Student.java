@@ -44,7 +44,7 @@ public class Student {
 	public void setStatusCode(int statusCode) {
 		this.statusCode = statusCode;
 	}
-	public String getStatus() {
+	public String getStudentStatus() {
 		return status;
 	}
 	public void setStatus(String status) {
