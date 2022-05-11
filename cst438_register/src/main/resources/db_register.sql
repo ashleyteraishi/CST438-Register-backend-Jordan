@@ -82,7 +82,7 @@ CREATE TABLE `student` (
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `status` varchar(255) DEFAULT NULL,
-  `status_code` int(11) NOT NULL,
+  `status_code` int(11) DEFAULT NULL,
   PRIMARY KEY (`student_id`)
 )  ;
 
