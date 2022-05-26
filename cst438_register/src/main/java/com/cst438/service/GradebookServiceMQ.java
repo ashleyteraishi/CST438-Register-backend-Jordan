@@ -35,6 +35,7 @@ public class GradebookServiceMQ extends GradebookService {
 		 
 		//TODO  complete this method in homework 4
 		
+		
 	}
 	
 	@RabbitListener(queues = "registration-queue")
@@ -42,6 +43,7 @@ public class GradebookServiceMQ extends GradebookService {
 	public void receive(CourseDTOG courseDTOG) {
 		
 		//TODO  complete this method in homework 4
+		System.out.println("Recieved Rabbit Message " + courseDTOG);
 		
 	}
 	

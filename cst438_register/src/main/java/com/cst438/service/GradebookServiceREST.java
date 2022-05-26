@@ -14,7 +14,7 @@ public class GradebookServiceREST extends GradebookService {
 	String gradebook_url;
 	
 	public GradebookServiceREST() {
-		System.out.println("REST grade book service");
+		System.out.println("Recieved REST Message");
 	}
 
 	@Override
